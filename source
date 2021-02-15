@@ -1,0 +1,52 @@
+//First Step : write this code in functions.php
+
+// Start Shortcode For Courses -----------------------------------------------
+function show_courses(){
+    // WP_Query arguments
+    $args = array(
+        'post_type'              => array( 'lp_course' ),
+        'post_status'            => array( 'publish' ),
+        'posts_per_page'         => '3',
+        'order'                  => 'DESC',
+        'orderby'                => 'date',
+    );
+
+    // The Query
+        $query = new WP_Query( $args );
+		
+    // The Loop
+        if ( $query->have_posts() ) { ?>
+        <ul class="learn-press-courses">
+        <?php
+            while ( $query->have_posts() ) {
+                $query->the_post(); ?>
+                <li id="post-<?php the_ID(); ?>" class="post-<?php the_ID(); ?> lp_course type-lp_course status-publish has-post-thumbnail hentry course">
+                    <a href="<?php echo get_the_permalink(); ?>" class="course-permalink">
+                        <div class="course-thumbnail">
+                            <?php the_post_thumbnail(array(400, 250)); ?>
+                        </div>
+                        <h3 class="course-title"><?php the_title(); ?></h3>
+                    </a>
+                    <div class="course-info">
+                        <div class="course-price" style="direction:ltr;text-align:left">
+                            <span class="price"></span>
+                        </div>
+                        <span class="course-instructor">
+                            <a><?php the_author(); ?></a>
+                        </span>
+                    </div>
+                </li>
+        <?php } ?>
+        </ul>
+        <?php
+        } else {
+            // no posts found
+        }
+
+    // Restore original Post Data
+        wp_reset_postdata();
+}
+add_shortcode( 'show_course', 'show_courses' );
+// End Shortcode For Courses -----------------------------------------------
+
+//First Step : open the editor and write [show_course] in editor
